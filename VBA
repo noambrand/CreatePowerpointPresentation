@@ -1,0 +1,90 @@
+Option Explicit
+'Noam Brand VBA
+'Write VBA code for a PowerPoint presentation about the history of Al.
+'You are to fill in all the text with your own knowledge, no placeholders. I need 5 slides.
+'Insert pics at bottom of the slide.
+'The slide Texts need to be aligned to left,slide Titles should be centered.
+
+Sub CreatePowerpointPresentation()
+    ' Declare PowerPoint application and presentation variables
+    Dim pptApp As Object
+    Dim pptPresentation As Object
+    Dim pptSlide As Object
+    Dim pptShape As Object
+    Dim i As Integer
+
+    ' Declare arrays for slide titles, texts, and image paths
+    Dim slideTitles(4) As String
+    Dim slideTexts(4) As String
+    Dim imagePaths(4) As String
+
+    ' Initialize slide titles
+    slideTitles(0) = "The History of Artificial Intelligence"
+    slideTitles(1) = "Early Developments (1950s - 1970s)"
+    slideTitles(2) = "AI Winter and Resurgence (1980s - 2000s)"
+    slideTitles(3) = "Recent Advances (2010s - Present)"
+    slideTitles(4) = "Future Prospects and Challenges"
+
+    ' Initialize slide texts
+    slideTexts(0) = "Artificial Intelligence (AI) refers to the simulation of human intelligence in machines. It encompasses learning, reasoning, problem-solving, perception, and language understanding."
+    slideTexts(1) = "The foundation of AI as an academic discipline started in the 1950s. Pioneers like Alan Turing and John McCarthy laid the groundwork with concepts like the Turing Test and the term 'Artificial Intelligence' itself."
+    slideTexts(2) = "After initial excitement, AI faced reduced funding and interest, known as the 'AI Winter.' However, the late 1990s and 2000s saw a resurgence, thanks to improved machine learning techniques and increased computational power."
+    slideTexts(3) = "Recent years have seen breakthroughs in deep learning, neural networks, and big data analytics, significantly advancing AI capabilities in areas like image and speech recognition."
+    slideTexts(4) = "The future of AI holds great promise, from healthcare to autonomous vehicles. However, challenges like ethical concerns and job displacement remain key issues to address."
+
+    ' Initialize image paths
+    imagePaths(0) = "C:\Users\noamb\Downloads\EXCEL_VBA_Noam6\pics\1.jpg"
+    imagePaths(1) = "C:\Users\noamb\Downloads\EXCEL_VBA_Noam6\pics\2.jpg"
+    imagePaths(2) = "C:\Users\noamb\Downloads\EXCEL_VBA_Noam6\pics\3.jpg"
+    imagePaths(3) = "C:\Users\noamb\Downloads\EXCEL_VBA_Noam6\pics\4.jpg"
+    imagePaths(4) = "C:\Users\noamb\Downloads\EXCEL_VBA_Noam6\pics\5.jpg"
+
+    ' Create a new PowerPoint application and presentation
+    Set pptApp = CreateObject("PowerPoint.Application")
+    pptApp.Visible = True
+    Set pptPresentation = pptApp.Presentations.Add
+
+'' Apply a built-in design template
+'pptPresentation.Designs(1).ApplyTo (pptPresentation)
+
+    ' Creating slides with titles, text, and images
+    For i = 0 To 4
+        Set pptSlide = pptPresentation.Slides.Add(i + 1, ppLayoutText)
+'        pptSlide.design = pptPresentation.Designs("òøëú ðåùà Office")
+
+
+        With pptSlide
+            ' Adding title and text
+            .Shapes(1).TextFrame.TextRange.Text = slideTitles(i)
+            .Shapes(2).TextFrame.TextRange.Text = slideTexts(i)
+
+            ' Styling and aligning title
+            With .Shapes(1).TextFrame.TextRange
+                .Font.Name = "Arial"
+                .Font.Size = 24
+                .Font.Bold = msoTrue
+                .ParagraphFormat.Alignment = ppAlignCenter
+                .ParagraphFormat.TextDirection = ppDirectionLeftToRight ' Set text direction to left-to-right
+            End With
+
+
+        With .Shapes(2).TextFrame.TextRange
+            .Text = ""
+            .Text = slideTexts(i)
+            .Font.Size = 18
+            .Font.Bold = msoFalse
+            .ParagraphFormat.TextDirection = ppDirectionLeftToRight
+            .ParagraphFormat.Alignment = ppAlignLeft
+        End With
+
+            ' Adding image at the bottom of the slide
+            Set pptShape = .Shapes.AddPicture(FileName:=imagePaths(i), LinkToFile:=msoFalse, _
+                                              SaveWithDocument:=msoCTrue, Left:=100, Top:=pptPresentation.PageSetup.SlideHeight - 350, Width:=400, Height:=300)
+        End With
+    Next i
+
+    ' Clean up
+    Set pptSlide = Nothing
+    Set pptPresentation = Nothing
+    Set pptApp = Nothing
+End Sub
